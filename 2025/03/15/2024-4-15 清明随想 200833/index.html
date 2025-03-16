@@ -158,21 +158,7 @@
   isHighlightShrink: false,
   isToc: true,
   pageType: 'post'
-}</script><script>
-  document.addEventListener('DOMContentLoaded', function() {
-    new Gitalk({
-      clientID: 'Ov23liOYxj4lRpU3hjn9',
-      clientSecret: 'd810cf5a8ea3aeb2a629cd0ef87d5c9e48d5cc58',
-      repo: 'cceec.github.io',
-      owner: 'cceec',
-      admin: ['cceec'],
-      proxy: 'https://proxy-gitalk-api.netlify.app/github_access_token', // 强制覆盖
-      id: location.pathname,
-      distractionFreeMode: false
-    }).render('gitalk-container')
-  })
-</script>
-<meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">re硫酸盐的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">re硫酸盐的博客</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题<a class="post-edit-link" href="https://github.com/cceec/cceec.github.io/edit/master/source/_posts/2024-4-15 清明随想 200833.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-15T15:24:45.194Z" title="发表于 2025-03-15 23:24:45">2025-03-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-15T12:08:33.661Z" title="更新于 2024-04-15 20:08:33">2024-04-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="清明随想"><a href="#清明随想" class="headerlink" title="清明随想"></a>清明随想</h1><p>今年的清明，天很蓝，太阳很好。</p>
+}</script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">re硫酸盐的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">re硫酸盐的博客</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题<a class="post-edit-link" href="https://github.com/cceec/cceec.github.io/edit/master/source/_posts/2024-4-15 清明随想 200833.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-03-15T15:24:45.194Z" title="发表于 2025-03-15 23:24:45">2025-03-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-04-15T12:08:33.661Z" title="更新于 2024-04-15 20:08:33">2024-04-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="清明随想"><a href="#清明随想" class="headerlink" title="清明随想"></a>清明随想</h1><p>今年的清明，天很蓝，太阳很好。</p>
 <p>要是平时在学校，早就开始一边跑圈一边骂娘了，可今天是清明，是我朝思暮想的假期啊！</p>
 <p>假期的好处就是可以瞎想，瞎讲讲故事吧。</p>
 <h2 id="话得有个头"><a href="#话得有个头" class="headerlink" title="话得有个头"></a>话得有个头</h2><p>不受限制的表达自己，或许就是我写作的初衷吧。</p>
@@ -243,4 +229,17 @@
   } else {
     window.loadOtherComment = loadGitalk
   }
-})()</script></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+})()</script></div><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  // 劫持Gitalk构造函数
+  const originalGitalk = window.Gitalk;
+  window.Gitalk = function(options) {
+    // 强制覆盖代理配置
+    const overrideOptions = {
+      ...options,
+      proxy: 'https://proxy-gitalk-api.netlify.app/github_access_token'
+    };
+    return new originalGitalk(overrideOptions);
+  };
+</script>
+<script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
