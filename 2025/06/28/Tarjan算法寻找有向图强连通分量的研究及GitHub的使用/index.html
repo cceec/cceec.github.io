@@ -1,0 +1,1309 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>re硫酸盐的博客 | re硫酸盐的博客</title><meta name="author" content="硫酸盐"><meta name="copyright" content="硫酸盐"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Tarjan算法寻找有向图强连通分量的研究作者：刘松洋，董梓烨 一、理论学习情况1.研究方法学习本研究通过实验法、文献研究法等方法，学习并研究 Tarjan算法求有向图强连通分量。 2.学科知识拓展拓展知识：图论中有向图的概念、Tarjan算法以及其c++实现。 3.创新思维培养通过拓展课外算法知识，加深对c++的理解，并锻炼GitHub的使用能力，提升创新能力与自主学习能力。 二、研究内容1.内">
+<meta property="og:type" content="article">
+<meta property="og:title" content="re硫酸盐的博客">
+<meta property="og:url" content="https://cceec.github.io/2025/06/28/Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%8F%8AGitHub%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="re硫酸盐的博客">
+<meta property="og:description" content="Tarjan算法寻找有向图强连通分量的研究作者：刘松洋，董梓烨 一、理论学习情况1.研究方法学习本研究通过实验法、文献研究法等方法，学习并研究 Tarjan算法求有向图强连通分量。 2.学科知识拓展拓展知识：图论中有向图的概念、Tarjan算法以及其c++实现。 3.创新思维培养通过拓展课外算法知识，加深对c++的理解，并锻炼GitHub的使用能力，提升创新能力与自主学习能力。 二、研究内容1.内">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cceec.github.io/img/avatar.jpg">
+<meta property="article:published_time" content="2025-06-28T13:59:23.780Z">
+<meta property="article:modified_time" content="2025-07-09T12:44:16.282Z">
+<meta property="article:author" content="硫酸盐">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cceec.github.io/img/avatar.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "",
+  "url": "https://cceec.github.io/2025/06/28/Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%8F%8AGitHub%E7%9A%84%E4%BD%BF%E7%94%A8/",
+  "image": "https://cceec.github.io/img/avatar.jpg",
+  "datePublished": "2025-06-28T13:59:23.780Z",
+  "dateModified": "2025-07-09T12:44:16.282Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "硫酸盐",
+      "url": "https://cceec.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://cceec.github.io/2025/06/28/Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%8F%8AGitHub%E7%9A%84%E4%BD%BF%E7%94%A8/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 're硫酸盐的博客',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div class="post" id="body-wrap"><header class="post-bg fixed" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">re硫酸盐的博客</span></a><a class="nav-page-title" href="/"><span class="site-name">re硫酸盐的博客</span></a></span><div id="menus"></div></nav><div id="post-info"><h1 class="post-title">无标题<a class="post-edit-link" href="https://github.com/cceec/cceec.github.io/edit/master/source/_posts/Tarjan算法寻找有向图强连通分量的研究及GitHub的使用.md" title="编辑" target="_blank"><i class="fas fa-pencil-alt"></i></a></h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-06-28T13:59:23.780Z" title="发表于 2025-06-28 21:59:23">2025-06-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-07-09T12:44:16.282Z" title="更新于 2025-07-09 20:44:16">2025-07-09</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Tarjan算法寻找有向图强连通分量的研究"><a href="#Tarjan算法寻找有向图强连通分量的研究" class="headerlink" title="Tarjan算法寻找有向图强连通分量的研究"></a>Tarjan算法寻找有向图强连通分量的研究</h1><p>作者：刘松洋，董梓烨</p>
+<h2 id="一、理论学习情况"><a href="#一、理论学习情况" class="headerlink" title="一、理论学习情况"></a>一、理论学习情况</h2><h3 id="1-研究方法学习"><a href="#1-研究方法学习" class="headerlink" title="1.研究方法学习"></a>1.研究方法学习</h3><p>本研究通过实验法、文献研究法等方法，学习并研究 Tarjan算法求有向图强连通分量。</p>
+<h3 id="2-学科知识拓展"><a href="#2-学科知识拓展" class="headerlink" title="2.学科知识拓展"></a>2.学科知识拓展</h3><p>拓展知识：图论中有向图的概念、Tarjan算法以及其c++实现。</p>
+<h3 id="3-创新思维培养"><a href="#3-创新思维培养" class="headerlink" title="3.创新思维培养"></a>3.创新思维培养</h3><p>通过拓展课外算法知识，加深对c++的理解，并锻炼GitHub的使用能力，提升创新能力与自主学习能力。</p>
+<h2 id="二、研究内容"><a href="#二、研究内容" class="headerlink" title="二、研究内容"></a>二、研究内容</h2><h3 id="1-内容概述"><a href="#1-内容概述" class="headerlink" title="1.内容概述"></a>1.内容概述</h3><p>本文围绕有向图强连通分量（Strongly Connected Components, SCC）问题，深入学习了Tarjan算法的原理与实现。</p>
+<p>为了体现Tarjan算法的优越性，本文将其与另一种有向图强连通分量求解算法Kosaraju算法作对比实验，比较两者实际运行效率。</p>
+<p>通过手工演示、代码编写与计时测试，验证了Tarjan算法在线性时间内完成SCC分解的性能优势。结果表明：在规模不超过 10^4 边的典型图上，Tarjan较Kosaraju平均提速30%~40%，且实现更简洁。</p>
+<p>研究报告及实验代码通过GitHub进行展示。</p>
+<h3 id="2-SCC及Tarjan算法简介"><a href="#2-SCC及Tarjan算法简介" class="headerlink" title="2.SCC及Tarjan算法简介"></a>2.SCC及Tarjan算法简介</h3><ol>
+<li><p><strong>有向图及SCC概念</strong>   　有向图是由一组顶点（节点）和一组有向边（箭头）组成的图结构，其中每条边都有方向，从一个顶点指向另一个顶点。</p>
+<p>若一张有向图的节点两两互相可达，则称这张图是 **强连通的 (strongly connected)**。</p>
+<p>有向图中若任意两点互相可达，则构成一个“强连通分量”，它能刻画网络中“闭环群体”或代码模块的“循环依赖”。</p>
+</li>
+<li><p><strong>Tarjan算法简介</strong>  　1972年，Robert Tarjan提出的Tarjan算法，仅一次DFS便能求出所有SCC，令人震惊的是这位计算机科学家还在世。</p>
+<p>Tarjan算法是求有向图强连通分量的经典线性时间算法，主要思想如下：</p>
+<ol>
+<li>深度优先搜索(DFS)遍历图时，对每个节点u记录两个值：  <ul>
+<li>dfn[u]：u首次访问时的序号；  </li>
+<li>low[u]：u及其后代通过回边能追溯到的最小dfn值。</li>
+</ul>
+</li>
+<li>将访问过的节点压入栈中，并用标记数组inStack[]区分栈内外。DFS遇到新节点v时递归访问，更新low[u]&#x3D;min(low[u], low[v])；若遇到已在栈中的邻居v，则low[u]&#x3D;min(low[u], dfn[v])。</li>
+<li>当遍历完u的所有邻接点后，若发现low[u]&#x3D;&#x3D;dfn[u]，说明u是某个SCC的根节点，于是从栈顶依次弹出节点直到u，弹出的所有节点构成一个强连通分量。</li>
+</ol>
+<p>整个过程只需一次DFS，时间复杂度O(V+E)、空间复杂度O(V)，非常适合大规模图的在线分析。</p>
+<p>通过算法可视化网站进行tarjan算法的学习：<a target="_blank" rel="noopener" href="https://algorithm-visualizer.org/brute-force/tarjans-strongly-connected-components">Brute Force - Tarjan’s Strongly Connected Components</a>。</p>
+<h3 id="3-Tarjan算法与Kosaraju算法比较"><a href="#3-Tarjan算法与Kosaraju算法比较" class="headerlink" title="3.Tarjan算法与Kosaraju算法比较"></a>3.Tarjan算法与Kosaraju算法比较</h3><p>编写代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span><span class="comment">//万能头爱好者</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN = <span class="number">1e5</span><span class="number">+5</span>;</span><br><span class="line">vector&lt;<span class="type">int</span>&gt; G[MAXN], rG[MAXN];</span><br><span class="line"><span class="type">int</span> dfn[MAXN], low[MAXN], bel[MAXN];</span><br><span class="line"><span class="type">bool</span> vis[MAXN], used[MAXN];</span><br><span class="line">stack&lt;<span class="type">int</span>&gt; stk;</span><br><span class="line">vector&lt;<span class="type">int</span>&gt; ord;</span><br><span class="line"><span class="type">int</span> n, m, cnt, scc_cnt;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">tarjan</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    dfn[u] = low[u] = ++cnt;</span><br><span class="line">    stk.<span class="built_in">push</span>(u); vis[u] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> v : G[u]) &#123;</span><br><span class="line">        <span class="keyword">if</span>(!dfn[v]) &#123;</span><br><span class="line">            <span class="built_in">tarjan</span>(v);</span><br><span class="line">            low[u] = <span class="built_in">min</span>(low[u], low[v]);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(vis[v]) &#123;</span><br><span class="line">            low[u] = <span class="built_in">min</span>(low[u], dfn[v]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(low[u] == dfn[u]) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> x = <span class="number">-1</span>; x != u;) &#123;</span><br><span class="line">            x = stk.<span class="built_in">top</span>(); stk.<span class="built_in">pop</span>();</span><br><span class="line">            bel[x] = scc_cnt;</span><br><span class="line">            vis[x] = <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        scc_cnt++;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs1</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    used[u] = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> v : G[u]) </span><br><span class="line">        <span class="keyword">if</span>(!used[v]) <span class="built_in">dfs1</span>(v);</span><br><span class="line">    ord.<span class="built_in">push_back</span>(u);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">dfs2</span><span class="params">(<span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">    used[u] = <span class="literal">false</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> v : rG[u])</span><br><span class="line">        <span class="keyword">if</span>(used[v]) <span class="built_in">dfs2</span>(v);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">kosaraju</span><span class="params">()</span> </span>&#123;<span class="comment">//这个算法详见oi.wiki</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=n; ++i) </span><br><span class="line">        <span class="keyword">if</span>(!used[i]) <span class="built_in">dfs1</span>(i);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=n<span class="number">-1</span>; i&gt;=<span class="number">0</span>; --i) </span><br><span class="line">        <span class="keyword">if</span>(used[ord[i]]) <span class="built_in">dfs2</span>(ord[i]);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;data.in&quot;</span>,<span class="string">&quot;r&quot;</span>,stdin); </span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);<span class="comment">//用了c的输入输出，更快一点</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> u,v; m--;) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;u, &amp;v);</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        rG[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">clock_t</span> t1 = <span class="built_in">clock</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=n; ++i) </span><br><span class="line">        <span class="keyword">if</span>(!dfn[i]) <span class="built_in">tarjan</span>(i);</span><br><span class="line">    <span class="type">clock_t</span> t2 = <span class="built_in">clock</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="type">clock_t</span> t3 = <span class="built_in">clock</span>();</span><br><span class="line">    <span class="built_in">kosaraju</span>();</span><br><span class="line">    <span class="type">clock_t</span> t4 = <span class="built_in">clock</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Tarjan: %.2fms SCCs:%d\n&quot;</span>, <span class="number">1000.0</span>*(t2-t1)/CLOCKS_PER_SEC, scc_cnt);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Kosaraju: %.2fms\n&quot;</span>, <span class="number">1000.0</span>*(t4-t3)/CLOCKS_PER_SEC);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>编写数据生成器：</p>
+</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span><span class="comment">//万能头爱好者</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN = <span class="number">1e5</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXM = <span class="number">2e5</span>;</span><br><span class="line"></span><br><span class="line">vector&lt;pair&lt;<span class="type">int</span>,<span class="type">int</span>&gt;&gt; edges;</span><br><span class="line"><span class="type">bool</span> vis[MAXN<span class="number">+5</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">gen_random_graph</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;m; ) &#123;</span><br><span class="line">        <span class="type">int</span> u = <span class="built_in">rand</span>()%n + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> v = <span class="built_in">rand</span>()%n + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(u != v) &#123;</span><br><span class="line">            edges.<span class="built_in">push_back</span>(&#123;u,v&#125;);</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">gen_scc_graph</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> scc_cnt)</span> </span>&#123;</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">nodes</span><span class="params">(n)</span></span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;n; i++) nodes[i] = i<span class="number">+1</span>;</span><br><span class="line">    <span class="built_in">random_shuffle</span>(nodes.<span class="built_in">begin</span>(), nodes.<span class="built_in">end</span>());</span><br><span class="line">    </span><br><span class="line">    <span class="type">int</span> base = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> k=<span class="number">0</span>; k&lt;scc_cnt; k++) &#123;</span><br><span class="line">        <span class="type">int</span> scc_size = (k == scc_cnt<span class="number">-1</span>) ? (n-base) : (<span class="built_in">rand</span>()%(n/scc_cnt*<span class="number">2</span>)<span class="number">+1</span>);</span><br><span class="line">        scc_size = <span class="built_in">min</span>(scc_size, n-base);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 生成环</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;scc_size; i++) &#123;</span><br><span class="line">            <span class="type">int</span> u = nodes[base+i];</span><br><span class="line">            <span class="type">int</span> v = nodes[base+(i<span class="number">+1</span>)%scc_size];</span><br><span class="line">            edges.<span class="built_in">push_back</span>(&#123;u,v&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 随机添加内部边</span></span><br><span class="line">        <span class="type">int</span> inner_edges = <span class="built_in">rand</span>()%(scc_size*<span class="number">2</span>);</span><br><span class="line">        <span class="keyword">while</span>(inner_edges--) &#123;</span><br><span class="line">            <span class="type">int</span> u = nodes[base+<span class="built_in">rand</span>()%scc_size];</span><br><span class="line">            <span class="type">int</span> v = nodes[base+<span class="built_in">rand</span>()%scc_size];</span><br><span class="line">            <span class="keyword">if</span>(u != v) edges.<span class="built_in">push_back</span>(&#123;u,v&#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        base += scc_size;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 添加SCC之间的边</span></span><br><span class="line">    <span class="type">int</span> cross_edges = <span class="built_in">rand</span>()%(n/<span class="number">2</span>);</span><br><span class="line">    <span class="keyword">while</span>(cross_edges--) &#123;</span><br><span class="line">        <span class="type">int</span> u = nodes[<span class="built_in">rand</span>()%n];</span><br><span class="line">        <span class="type">int</span> v = nodes[<span class="built_in">rand</span>()%n];</span><br><span class="line">        <span class="keyword">if</span>(u != v) edges.<span class="built_in">push_back</span>(&#123;u,v&#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">freopen</span>(<span class="string">&quot;data.in&quot;</span>,<span class="string">&quot;w&quot;</span>,stdout); </span><br><span class="line">    <span class="built_in">srand</span>(<span class="built_in">time</span>(<span class="number">0</span>));    </span><br><span class="line">    <span class="type">int</span> type = <span class="built_in">rand</span>()%<span class="number">3</span>; <span class="comment">// 0-随机图 1-强连通图 2-混合图</span></span><br><span class="line">    <span class="type">int</span> n = <span class="built_in">rand</span>()%MAXN + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> m = <span class="built_in">min</span>(<span class="built_in">rand</span>()%MAXM + <span class="number">1</span>, n*(n<span class="number">-1</span>));    </span><br><span class="line">    <span class="keyword">if</span>(type == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="built_in">gen_random_graph</span>(n, m);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(type == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="built_in">gen_scc_graph</span>(n, <span class="number">1</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="type">int</span> scc_cnt = <span class="built_in">rand</span>()%<span class="number">10</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="built_in">gen_scc_graph</span>(n, scc_cnt);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, n, edges.<span class="built_in">size</span>());</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> e : edges) &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%d %d\n&quot;</span>, e.first, e.second);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>编译设置：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-<span class="type">static</span>-libgcc -std=c+<span class="number">+14</span> -O3    -Wl,-stack=<span class="number">1342177280</span></span><br></pre></td></tr></table></figure>
+
+<p>进行小规模实验，并记录数据：</p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20250628224605556.png" alt="image-20250628224605556"></p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20250628225240723.png" alt="image-20250628225240723"></p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20250628225249212.png" alt="image-20250628225249212"></p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20250628225749525.png" alt="image-20250628225749525"></p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20250628225826303.png" alt="image-20250628225826303"></p>
+<p><img src="C:\Users\asus\AppData\Roaming\Typora\typora-user-images\image-20250628230059127.png" alt="image-20250628230059127"></p>
+<p>优化代码，进行较大规模数据测试：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXN = <span class="number">1e6</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAXM = <span class="number">1e6</span>;</span><br><span class="line"></span><br><span class="line">vector&lt;pair&lt;<span class="type">int</span>,<span class="type">int</span>&gt;&gt; edges;</span><br><span class="line"><span class="type">bool</span> vis[MAXN<span class="number">+5</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Graph</span> &#123;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; G[MAXN], rG[MAXN];</span><br><span class="line">    <span class="type">int</span> n, m;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">add_edge</span><span class="params">(<span class="type">int</span> u, <span class="type">int</span> v)</span> </span>&#123;</span><br><span class="line">        G[u].<span class="built_in">push_back</span>(v);</span><br><span class="line">        rG[v].<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Tarjan</span> &#123;</span><br><span class="line">    <span class="type">int</span> dfn[MAXN], low[MAXN], bel[MAXN];</span><br><span class="line">    <span class="type">bool</span> in_stack[MAXN];</span><br><span class="line">    stack&lt;<span class="type">int</span>&gt; stk;</span><br><span class="line">    <span class="type">int</span> cnt = <span class="number">0</span>, scc_cnt = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs</span><span class="params">(Graph &amp;graph, <span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">        dfn[u] = low[u] = ++cnt;</span><br><span class="line">        stk.<span class="built_in">push</span>(u);</span><br><span class="line">        in_stack[u] = <span class="literal">true</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> v : graph.G[u]) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!dfn[v]) &#123;</span><br><span class="line">                <span class="built_in">dfs</span>(graph, v);</span><br><span class="line">                low[u] = <span class="built_in">min</span>(low[u], low[v]);</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(in_stack[v]) &#123;</span><br><span class="line">                low[u] = <span class="built_in">min</span>(low[u], dfn[v]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(low[u] == dfn[u]) &#123;</span><br><span class="line">            <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">                <span class="type">int</span> x = stk.<span class="built_in">top</span>();</span><br><span class="line">                stk.<span class="built_in">pop</span>();</span><br><span class="line">                bel[x] = scc_cnt;</span><br><span class="line">                in_stack[x] = <span class="literal">false</span>;</span><br><span class="line">                <span class="keyword">if</span>(x == u) <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            scc_cnt++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">(Graph &amp;graph)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">fill</span>(dfn, dfn+graph.n<span class="number">+1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">fill</span>(low, low+graph.n<span class="number">+1</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">fill</span>(in_stack, in_stack+graph.n<span class="number">+1</span>, <span class="literal">false</span>);</span><br><span class="line">        cnt = scc_cnt = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=graph.n; i++)</span><br><span class="line">            <span class="keyword">if</span>(!dfn[i]) <span class="built_in">dfs</span>(graph, i);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Kosaraju</span> &#123;</span><br><span class="line">    vector&lt;<span class="type">int</span>&gt; ord;</span><br><span class="line">    <span class="type">bool</span> vis[MAXN];</span><br><span class="line">    <span class="type">int</span> scc_cnt = <span class="number">0</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs1</span><span class="params">(Graph &amp;graph, <span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">        vis[u] = <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> v : graph.G[u])</span><br><span class="line">            <span class="keyword">if</span>(!vis[v]) <span class="built_in">dfs1</span>(graph, v);</span><br><span class="line">        ord.<span class="built_in">push_back</span>(u);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">dfs2</span><span class="params">(Graph &amp;graph, <span class="type">int</span> u)</span> </span>&#123;</span><br><span class="line">        vis[u] = <span class="literal">false</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> v : graph.rG[u])</span><br><span class="line">            <span class="keyword">if</span>(vis[v]) <span class="built_in">dfs2</span>(graph, v);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">(Graph &amp;graph)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">fill</span>(vis, vis+graph.n<span class="number">+1</span>, <span class="literal">false</span>);</span><br><span class="line">        ord.<span class="built_in">clear</span>();</span><br><span class="line">        scc_cnt = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=graph.n; i++)</span><br><span class="line">            <span class="keyword">if</span>(!vis[i]) <span class="built_in">dfs1</span>(graph, i);</span><br><span class="line">        </span><br><span class="line">        <span class="built_in">reverse</span>(ord.<span class="built_in">begin</span>(), ord.<span class="built_in">end</span>());</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> u : ord)</span><br><span class="line">            <span class="keyword">if</span>(vis[u]) &#123;</span><br><span class="line">                <span class="built_in">dfs2</span>(graph, u);</span><br><span class="line">                scc_cnt++;</span><br><span class="line">            &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">gen_graph</span><span class="params">(<span class="type">int</span> n, <span class="type">int</span> m)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;m; ) &#123;</span><br><span class="line">        <span class="type">int</span> u = (<span class="type">int</span>)(<span class="built_in">rand</span>()*<span class="built_in">rand</span>())%n + <span class="number">1</span>;</span><br><span class="line">        <span class="type">int</span> v = (<span class="type">int</span>)(<span class="built_in">rand</span>()*<span class="built_in">rand</span>())%n + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">if</span>(u != v) &#123;</span><br><span class="line">            edges.<span class="built_in">push_back</span>(&#123;u,v&#125;);</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">Graph graph;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	edges.<span class="built_in">clear</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>; i&lt;=graph.n; i++) &#123; </span><br><span class="line">        graph.G[i].<span class="built_in">clear</span>();</span><br><span class="line">        graph.rG[i].<span class="built_in">clear</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> n = (<span class="type">int</span>)(<span class="built_in">rand</span>()*<span class="built_in">rand</span>())%MAXN + <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> m = (<span class="type">int</span>)(<span class="built_in">rand</span>()*<span class="built_in">rand</span>())%(<span class="built_in">min</span>(n*(n<span class="number">-1</span>),MAXM))<span class="number">+1</span>;</span><br><span class="line">    <span class="built_in">gen_graph</span>(n, m);</span><br><span class="line">    </span><br><span class="line">	graph.n=n;</span><br><span class="line">	graph.m=(<span class="type">int</span>)edges.<span class="built_in">size</span>();</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> e : edges) &#123;</span><br><span class="line">        graph.<span class="built_in">add_edge</span>(e.first, e.second);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">solve</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line"><span class="comment">//	cout&lt;&lt;&quot;  sdfsdf&quot;;</span></span><br><span class="line">    <span class="built_in">init</span>();   </span><br><span class="line">    </span><br><span class="line">    Tarjan tarjan;</span><br><span class="line">    <span class="type">clock_t</span> t1 = <span class="built_in">clock</span>();</span><br><span class="line">    tarjan.<span class="built_in">solve</span>(graph);</span><br><span class="line">    <span class="type">clock_t</span> t2 = <span class="built_in">clock</span>();</span><br><span class="line">    </span><br><span class="line">    Kosaraju kosaraju;</span><br><span class="line">    <span class="type">clock_t</span> t3 = <span class="built_in">clock</span>();</span><br><span class="line">    kosaraju.<span class="built_in">solve</span>(graph);</span><br><span class="line">    <span class="type">clock_t</span> t4 = <span class="built_in">clock</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d,%d,%d,%.2f,%.2f,%d,%d\n&quot;</span>,</span><br><span class="line">       i,                    </span><br><span class="line">       graph.n,             </span><br><span class="line">       graph.m,              </span><br><span class="line">       <span class="number">1000.0</span>*(t2-t1)/CLOCKS_PER_SEC, <span class="comment">//Tarjan耗时</span></span><br><span class="line">       <span class="number">1000.0</span>*(t4-t3)/CLOCKS_PER_SEC, <span class="comment">//Kosaraju耗时</span></span><br><span class="line">       tarjan.scc_cnt,</span><br><span class="line">	   kosaraju.scc_cnt  <span class="comment">// SCC数量</span></span><br><span class="line">	);</span><br><span class="line">    <span class="keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">	<span class="built_in">freopen</span>(<span class="string">&quot;data.out&quot;</span>,<span class="string">&quot;w&quot;</span>,stdout);</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">&quot;run,n,m,tarjan_ms,kosaraju_ms,scc_cnt1,scc_cnt2\n&quot;</span>);</span><br><span class="line">	<span class="built_in">srand</span>(<span class="built_in">time</span>(<span class="number">0</span>));</span><br><span class="line">	<span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">1</span>; i&lt;=<span class="number">100</span>; i++)<span class="built_in">solve</span>(i);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>将数据制成表格并完善。</p>
+<table>
+<thead>
+<tr>
+<th>run</th>
+<th>n</th>
+<th>m</th>
+<th>tarjan_ms</th>
+<th>kosaraju_ms</th>
+<th>scc_cnt1</th>
+<th>scc_cnt2</th>
+<th>实验结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>70329</td>
+<td>70328</td>
+<td>6</td>
+<td>7</td>
+<td>61716</td>
+<td>61716</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>2</td>
+<td>607461</td>
+<td>607460</td>
+<td>96</td>
+<td>111</td>
+<td>548797</td>
+<td>548797</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>3</td>
+<td>73357</td>
+<td>73356</td>
+<td>6</td>
+<td>10</td>
+<td>73228</td>
+<td>73228</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>4</td>
+<td>423141</td>
+<td>423140</td>
+<td>63</td>
+<td>77</td>
+<td>390043</td>
+<td>390043</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1400656</td>
+<td>1163317</td>
+<td>214</td>
+<td>238</td>
+<td>1336487</td>
+<td>1336487</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>6</td>
+<td>419113</td>
+<td>419112</td>
+<td>65</td>
+<td>74</td>
+<td>418487</td>
+<td>418487</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1446329</td>
+<td>358676</td>
+<td>86</td>
+<td>112</td>
+<td>1446329</td>
+<td>1446329</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>8</td>
+<td>976757</td>
+<td>857539</td>
+<td>197</td>
+<td>228</td>
+<td>976753</td>
+<td>976753</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>9</td>
+<td>815916</td>
+<td>815915</td>
+<td>219</td>
+<td>270</td>
+<td>677152</td>
+<td>677152</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>10</td>
+<td>700401</td>
+<td>49808</td>
+<td>26</td>
+<td>34</td>
+<td>700401</td>
+<td>700401</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>11</td>
+<td>991915</td>
+<td>25168</td>
+<td>25</td>
+<td>47</td>
+<td>991915</td>
+<td>991915</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>12</td>
+<td>413199</td>
+<td>413198</td>
+<td>96</td>
+<td>103</td>
+<td>370894</td>
+<td>370894</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>13</td>
+<td>753016</td>
+<td>753015</td>
+<td>199</td>
+<td>229</td>
+<td>640014</td>
+<td>640014</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>14</td>
+<td>774772</td>
+<td>586721</td>
+<td>184</td>
+<td>208</td>
+<td>770741</td>
+<td>770741</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>15</td>
+<td>595287</td>
+<td>595286</td>
+<td>155</td>
+<td>180</td>
+<td>514642</td>
+<td>514642</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>16</td>
+<td>31977</td>
+<td>31976</td>
+<td>10</td>
+<td>6</td>
+<td>27820</td>
+<td>27820</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>17</td>
+<td>133744</td>
+<td>133743</td>
+<td>168</td>
+<td>98</td>
+<td>114523</td>
+<td>114523</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>18</td>
+<td>1929944</td>
+<td>375590</td>
+<td>124</td>
+<td>167</td>
+<td>1929944</td>
+<td>1929944</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>19</td>
+<td>1712217</td>
+<td>98065</td>
+<td>55</td>
+<td>79</td>
+<td>1712217</td>
+<td>1712217</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>20</td>
+<td>1033150</td>
+<td>1033149</td>
+<td>215</td>
+<td>260</td>
+<td>889274</td>
+<td>889274</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>21</td>
+<td>1604441</td>
+<td>1015809</td>
+<td>249</td>
+<td>269</td>
+<td>1604441</td>
+<td>1604441</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>22</td>
+<td>1257681</td>
+<td>1257680</td>
+<td>303</td>
+<td>339</td>
+<td>1162994</td>
+<td>1162994</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>23</td>
+<td>379173</td>
+<td>379172</td>
+<td>71</td>
+<td>82</td>
+<td>350820</td>
+<td>350820</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>24</td>
+<td>810215</td>
+<td>810214</td>
+<td>164</td>
+<td>195</td>
+<td>738278</td>
+<td>738278</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>25</td>
+<td>4411</td>
+<td>4410</td>
+<td>2</td>
+<td>0</td>
+<td>4396</td>
+<td>4396</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>26</td>
+<td>662977</td>
+<td>662976</td>
+<td>208</td>
+<td>165</td>
+<td>638013</td>
+<td>638013</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>27</td>
+<td>1740386</td>
+<td>246161</td>
+<td>100</td>
+<td>124</td>
+<td>1740386</td>
+<td>1740386</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>28</td>
+<td>101603</td>
+<td>101602</td>
+<td>16</td>
+<td>17</td>
+<td>101505</td>
+<td>101505</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>29</td>
+<td>1813313</td>
+<td>510545</td>
+<td>164</td>
+<td>224</td>
+<td>1813313</td>
+<td>1813313</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>30</td>
+<td>1610976</td>
+<td>34586</td>
+<td>32</td>
+<td>52</td>
+<td>1610976</td>
+<td>1610976</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>31</td>
+<td>1792139</td>
+<td>189885</td>
+<td>86</td>
+<td>111</td>
+<td>1792139</td>
+<td>1792139</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>32</td>
+<td>1996321</td>
+<td>512556</td>
+<td>163</td>
+<td>213</td>
+<td>1996321</td>
+<td>1996321</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>33</td>
+<td>63967</td>
+<td>63966</td>
+<td>7</td>
+<td>13</td>
+<td>63867</td>
+<td>63867</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>34</td>
+<td>979517</td>
+<td>979516</td>
+<td>213</td>
+<td>227</td>
+<td>920931</td>
+<td>920931</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>35</td>
+<td>589841</td>
+<td>589840</td>
+<td>119</td>
+<td>133</td>
+<td>571050</td>
+<td>571050</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>36</td>
+<td>1037344</td>
+<td>737768</td>
+<td>197</td>
+<td>202</td>
+<td>1000551</td>
+<td>1000551</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>37</td>
+<td>270533</td>
+<td>270532</td>
+<td>49</td>
+<td>64</td>
+<td>270531</td>
+<td>270531</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>38</td>
+<td>893781</td>
+<td>268689</td>
+<td>92</td>
+<td>108</td>
+<td>893781</td>
+<td>893781</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>39</td>
+<td>895046</td>
+<td>895045</td>
+<td>202</td>
+<td>281</td>
+<td>813778</td>
+<td>813778</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>40</td>
+<td>1122961</td>
+<td>261089</td>
+<td>108</td>
+<td>178</td>
+<td>1122961</td>
+<td>1122961</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>41</td>
+<td>559377</td>
+<td>559376</td>
+<td>181</td>
+<td>239</td>
+<td>484702</td>
+<td>484702</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>42</td>
+<td>908151</td>
+<td>908150</td>
+<td>232</td>
+<td>293</td>
+<td>839800</td>
+<td>839800</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>43</td>
+<td>1080326</td>
+<td>630809</td>
+<td>227</td>
+<td>190</td>
+<td>1080319</td>
+<td>1080319</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>44</td>
+<td>1876121</td>
+<td>835401</td>
+<td>194</td>
+<td>200</td>
+<td>1876121</td>
+<td>1876121</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>45</td>
+<td>1060385</td>
+<td>121617</td>
+<td>40</td>
+<td>58</td>
+<td>1060385</td>
+<td>1060385</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>46</td>
+<td>447812</td>
+<td>177917</td>
+<td>32</td>
+<td>39</td>
+<td>447812</td>
+<td>447812</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>47</td>
+<td>1333721</td>
+<td>314093</td>
+<td>74</td>
+<td>94</td>
+<td>1333721</td>
+<td>1333721</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>48</td>
+<td>1651962</td>
+<td>955951</td>
+<td>278</td>
+<td>324</td>
+<td>1651936</td>
+<td>1651936</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>49</td>
+<td>1092313</td>
+<td>408386</td>
+<td>206</td>
+<td>159</td>
+<td>1092313</td>
+<td>1092313</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>50</td>
+<td>254501</td>
+<td>254500</td>
+<td>67</td>
+<td>71</td>
+<td>252065</td>
+<td>252065</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>51</td>
+<td>698456</td>
+<td>380889</td>
+<td>133</td>
+<td>157</td>
+<td>698454</td>
+<td>698454</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>52</td>
+<td>45140</td>
+<td>45139</td>
+<td>11</td>
+<td>14</td>
+<td>37893</td>
+<td>37893</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>53</td>
+<td>1040961</td>
+<td>822565</td>
+<td>234</td>
+<td>220</td>
+<td>1040949</td>
+<td>1040949</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>54</td>
+<td>545741</td>
+<td>264929</td>
+<td>71</td>
+<td>76</td>
+<td>545741</td>
+<td>545741</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>55</td>
+<td>1577025</td>
+<td>371561</td>
+<td>111</td>
+<td>140</td>
+<td>1577025</td>
+<td>1577025</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>56</td>
+<td>1396233</td>
+<td>324526</td>
+<td>98</td>
+<td>129</td>
+<td>1396233</td>
+<td>1396233</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>57</td>
+<td>1582545</td>
+<td>1072601</td>
+<td>267</td>
+<td>310</td>
+<td>1582498</td>
+<td>1582498</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>58</td>
+<td>279045</td>
+<td>196244</td>
+<td>51</td>
+<td>49</td>
+<td>273243</td>
+<td>273243</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>59</td>
+<td>1696902</td>
+<td>333565</td>
+<td>113</td>
+<td>282</td>
+<td>1696901</td>
+<td>1696901</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>60</td>
+<td>1070729</td>
+<td>93117</td>
+<td>74</td>
+<td>94</td>
+<td>1070729</td>
+<td>1070729</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>61</td>
+<td>509601</td>
+<td>509600</td>
+<td>264</td>
+<td>154</td>
+<td>468798</td>
+<td>468798</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>62</td>
+<td>1828912</td>
+<td>468785</td>
+<td>176</td>
+<td>221</td>
+<td>1828912</td>
+<td>1828912</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>63</td>
+<td>108981</td>
+<td>108980</td>
+<td>18</td>
+<td>23</td>
+<td>98081</td>
+<td>98081</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>64</td>
+<td>1600919</td>
+<td>1600918</td>
+<td>560</td>
+<td>719</td>
+<td>1599484</td>
+<td>1599484</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>65</td>
+<td>1077145</td>
+<td>1077144</td>
+<td>421</td>
+<td>411</td>
+<td>1025073</td>
+<td>1025073</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>66</td>
+<td>312513</td>
+<td>312512</td>
+<td>115</td>
+<td>223</td>
+<td>289279</td>
+<td>289279</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>67</td>
+<td>49553</td>
+<td>49552</td>
+<td>9</td>
+<td>7</td>
+<td>48081</td>
+<td>48081</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>68</td>
+<td>1169515</td>
+<td>148371</td>
+<td>117</td>
+<td>140</td>
+<td>1169515</td>
+<td>1169515</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>69</td>
+<td>738877</td>
+<td>72833</td>
+<td>55</td>
+<td>78</td>
+<td>738877</td>
+<td>738877</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>70</td>
+<td>1746784</td>
+<td>1616749</td>
+<td>676</td>
+<td>805</td>
+<td>1529895</td>
+<td>1529895</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>71</td>
+<td>1670027</td>
+<td>932836</td>
+<td>424</td>
+<td>841</td>
+<td>1670027</td>
+<td>1670027</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>72</td>
+<td>385646</td>
+<td>329801</td>
+<td>115</td>
+<td>116</td>
+<td>379657</td>
+<td>379657</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>73</td>
+<td>1804109</td>
+<td>975301</td>
+<td>324</td>
+<td>328</td>
+<td>1804109</td>
+<td>1804109</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>74</td>
+<td>738302</td>
+<td>738301</td>
+<td>249</td>
+<td>228</td>
+<td>659765</td>
+<td>659765</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>75</td>
+<td>406550</td>
+<td>406549</td>
+<td>112</td>
+<td>137</td>
+<td>349043</td>
+<td>349043</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>76</td>
+<td>933097</td>
+<td>933096</td>
+<td>190</td>
+<td>214</td>
+<td>916207</td>
+<td>916207</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>77</td>
+<td>231057</td>
+<td>231056</td>
+<td>47</td>
+<td>52</td>
+<td>210384</td>
+<td>210384</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>78</td>
+<td>1879413</td>
+<td>500945</td>
+<td>175</td>
+<td>200</td>
+<td>1879413</td>
+<td>1879413</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>79</td>
+<td>1994695</td>
+<td>1584527</td>
+<td>560</td>
+<td>511</td>
+<td>1994246</td>
+<td>1994246</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>80</td>
+<td>1172183</td>
+<td>1172182</td>
+<td>398</td>
+<td>336</td>
+<td>1171996</td>
+<td>1171996</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>81</td>
+<td>674653</td>
+<td>674652</td>
+<td>140</td>
+<td>149</td>
+<td>647988</td>
+<td>647988</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>82</td>
+<td>1140281</td>
+<td>170241</td>
+<td>59</td>
+<td>86</td>
+<td>1140279</td>
+<td>1140279</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>83</td>
+<td>1894298</td>
+<td>980867</td>
+<td>250</td>
+<td>290</td>
+<td>1894296</td>
+<td>1894296</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>84</td>
+<td>1018651</td>
+<td>137729</td>
+<td>40</td>
+<td>71</td>
+<td>1018651</td>
+<td>1018651</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>85</td>
+<td>201705</td>
+<td>89366</td>
+<td>17</td>
+<td>13</td>
+<td>201699</td>
+<td>201699</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>86</td>
+<td>483190</td>
+<td>483189</td>
+<td>95</td>
+<td>111</td>
+<td>415962</td>
+<td>415962</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>87</td>
+<td>469854</td>
+<td>469853</td>
+<td>125</td>
+<td>124</td>
+<td>386279</td>
+<td>386279</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>88</td>
+<td>1567790</td>
+<td>908841</td>
+<td>240</td>
+<td>280</td>
+<td>1567774</td>
+<td>1567774</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>89</td>
+<td>1929225</td>
+<td>335801</td>
+<td>110</td>
+<td>144</td>
+<td>1929225</td>
+<td>1929225</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>90</td>
+<td>618680</td>
+<td>39019</td>
+<td>12</td>
+<td>31</td>
+<td>618679</td>
+<td>618679</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>91</td>
+<td>607329</td>
+<td>497381</td>
+<td>106</td>
+<td>123</td>
+<td>603067</td>
+<td>603067</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>92</td>
+<td>1049137</td>
+<td>277135</td>
+<td>79</td>
+<td>106</td>
+<td>1049137</td>
+<td>1049137</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>93</td>
+<td>226599</td>
+<td>226598</td>
+<td>39</td>
+<td>45</td>
+<td>209872</td>
+<td>209872</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>94</td>
+<td>634425</td>
+<td>520820</td>
+<td>96</td>
+<td>109</td>
+<td>602016</td>
+<td>602016</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>95</td>
+<td>1236542</td>
+<td>912543</td>
+<td>189</td>
+<td>212</td>
+<td>1236539</td>
+<td>1236539</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>96</td>
+<td>1215936</td>
+<td>1173981</td>
+<td>272</td>
+<td>347</td>
+<td>1024544</td>
+<td>1024544</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>97</td>
+<td>491758</td>
+<td>491757</td>
+<td>119</td>
+<td>131</td>
+<td>439968</td>
+<td>439968</td>
+<td>成功</td>
+</tr>
+<tr>
+<td>98</td>
+<td>25001</td>
+<td>25000</td>
+<td>6</td>
+<td>5</td>
+<td>24488</td>
+<td>24488</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>99</td>
+<td>1422619</td>
+<td>1422618</td>
+<td>488</td>
+<td>375</td>
+<td>1378186</td>
+<td>1378186</td>
+<td>失败</td>
+</tr>
+<tr>
+<td>100</td>
+<td>1881329</td>
+<td>1475809</td>
+<td>388</td>
+<td>405</td>
+<td>1881329</td>
+<td>1881329</td>
+<td>成功</td>
+</tr>
+</tbody></table>
+<h3 id="分析结论"><a href="#分析结论" class="headerlink" title="分析结论"></a>分析结论</h3><ol>
+<li><strong>数据概述</strong>该数据集记录了两种图算法(Tarjan和Kosaraju)的性能测试数据，包含运行时间(毫秒)、节点数(n)和强连通分量数等关键指标。</li>
+<li><strong>重要指标</strong><ul>
+<li><strong>tarjan_ms</strong>：Tarjan算法运行时间，平均153ms，最大676ms。</li>
+<li><strong>kosaraju_ms</strong>：Kosaraju算法运行时间，平均176ms，最大841ms，整体比Tarjan慢约15%</li>
+<li><strong>n</strong>：测试图的节点规模，平均94万节点，最大199万节点，数据规模差异显著</li>
+</ul>
+</li>
+<li><strong>关键洞察</strong><ul>
+<li>Kosaraju算法在所有测试案例中均比Tarjan算法慢，平均慢22ms(15%)</li>
+<li>两种算法的运行时间与节点规模(n)呈正相关，但并非严格线性关系</li>
+<li>数据包含极端案例(如n&#x3D;4411的最小案例和n≈200万的最大案例)，验证了算法在不同规模下的稳定性</li>
+<li>成功&#x2F;失败案例的运行时间无明显差异，说明失败原因可能与代码编写或数据特性相关</li>
+</ul>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://cceec.github.io">硫酸盐</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://cceec.github.io/2025/06/28/Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%8F%8AGitHub%E7%9A%84%E4%BD%BF%E7%94%A8/">https://cceec.github.io/2025/06/28/Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%8F%8AGitHub%E7%9A%84%E4%BD%BF%E7%94%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://cceec.github.io" target="_blank">re硫酸盐的博客</a>！</span></div></div><div class="tag_share"></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/06/09/%E9%98%B6%E6%AE%B5%E5%8F%B2%E8%A7%82/" title=""><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2"></div></div><div class="info-2"><div class="info-item-1">阶段史观 人的意义这一指导过程 5.26 周一 包括样子，生活实践。 朝鲜该如何被看，...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="gitalk-container"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">硫酸盐</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">26</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6"><span class="toc-number">1.</span> <span class="toc-text">Tarjan算法寻找有向图强连通分量的研究</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%90%86%E8%AE%BA%E5%AD%A6%E4%B9%A0%E6%83%85%E5%86%B5"><span class="toc-number">1.1.</span> <span class="toc-text">一、理论学习情况</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95%E5%AD%A6%E4%B9%A0"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.研究方法学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%AD%A6%E7%A7%91%E7%9F%A5%E8%AF%86%E6%8B%93%E5%B1%95"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.学科知识拓展</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E6%96%B0%E6%80%9D%E7%BB%B4%E5%9F%B9%E5%85%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">3.创新思维培养</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%A0%94%E7%A9%B6%E5%86%85%E5%AE%B9"><span class="toc-number">1.2.</span> <span class="toc-text">二、研究内容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%86%85%E5%AE%B9%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.内容概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-SCC%E5%8F%8ATarjan%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.SCC及Tarjan算法简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Tarjan%E7%AE%97%E6%B3%95%E4%B8%8EKosaraju%E7%AE%97%E6%B3%95%E6%AF%94%E8%BE%83"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.Tarjan算法与Kosaraju算法比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E7%BB%93%E8%AE%BA"><span class="toc-number">1.2.4.</span> <span class="toc-text">分析结论</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/28/Tarjan%E7%AE%97%E6%B3%95%E5%AF%BB%E6%89%BE%E6%9C%89%E5%90%91%E5%9B%BE%E5%BC%BA%E8%BF%9E%E9%80%9A%E5%88%86%E9%87%8F%E7%9A%84%E7%A0%94%E7%A9%B6%E5%8F%8AGitHub%E7%9A%84%E4%BD%BF%E7%94%A8/" title="无标题">无标题</a><time datetime="2025-06-28T13:59:23.780Z" title="发表于 2025-06-28 21:59:23">2025-06-28</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/09/%E9%98%B6%E6%AE%B5%E5%8F%B2%E8%A7%82/" title="无标题">无标题</a><time datetime="2025-06-09T13:41:39.833Z" title="发表于 2025-06-09 21:41:39">2025-06-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/09/5.12%E6%97%A5%E8%AE%B0%E6%91%98%E9%80%89/" title="5.12日记摘选">5.12日记摘选</a><time datetime="2025-06-08T17:33:00.000Z" title="发表于 2025-06-09 01:33:00">2025-06-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/06/09/6.3%E6%97%A5%E8%AE%B0%E6%91%98%E9%80%89/" title="6.3日记摘选">6.3日记摘选</a><time datetime="2025-06-08T16:29:00.000Z" title="发表于 2025-06-09 00:29:00">2025-06-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/05/24/5.24%E8%BF%98%E6%B4%BB%E7%9D%80%EF%BC%81/" title="还活着！">还活着！</a><time datetime="2025-05-24T14:51:00.000Z" title="发表于 2025-05-24 22:51:00">2025-05-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By 硫酸盐</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.3.5</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"proxy":"https://proxy-gitalk-api.netlify.app/github_access_token"}
+
+  const commentCount = n => {
+    const isCommentCount = document.querySelector('#post-meta .gitalk-comment-count')
+    if (isCommentCount) {
+      isCommentCount.textContent= n
+    }
+  }
+
+  const initGitalk = (el, path) => {
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGitalk = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+
+    const gitalk = new Gitalk({
+      clientID: 'Ov23liOYxj4lRpU3hjn9',
+      clientSecret: 'd810cf5a8ea3aeb2a629cd0ef87d5c9e48d5cc58',
+      repo: 'cceec.github.io',
+      owner: 'cceec',
+      admin: ['cceec'],
+      updateCountCallback: commentCount,
+      ...option,
+      id: isShuoshuo ? path : (option && option.id) || '1e017bf0234be5654145ac44356df26c'
+    })
+
+    gitalk.render('gitalk-container')
+  }
+
+  const loadGitalk = async(el, path) => {
+    if (typeof Gitalk === 'function') initGitalk(el, path)
+    else {
+      await btf.getCSS('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.css')
+      await btf.getScript('https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js')
+      initGitalk(el, path)
+    }
+  }
+
+  if (isShuoshuo) {
+    'Gitalk' === 'Gitalk'
+      ? window.shuoshuoComment = { loadComment: loadGitalk }
+      : window.loadOtherComment = loadGitalk
+    return
+  }
+
+  if ('Gitalk' === 'Gitalk' || !false) {
+    if (false) btf.loadComment(document.getElementById('gitalk-container'), loadGitalk)
+    else loadGitalk()
+  } else {
+    window.loadOtherComment = loadGitalk
+  }
+})()</script></div><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script>
+  // 劫持Gitalk构造函数
+  const originalGitalk = window.Gitalk;
+  window.Gitalk = function(options) {
+    // 强制覆盖代理配置
+    const overrideOptions = {
+      ...options,
+      proxy: 'https://proxy-gitalk-api.netlify.app/github_access_token'
+    };
+    return new originalGitalk(overrideOptions);
+  };
+</script>
+<script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
