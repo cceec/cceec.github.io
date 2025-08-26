@@ -1,0 +1,11 @@
+/* 风格1: Church 暖色 */
+.category-diary { background-color: #FFD700; } /* 金黄色 */
+.category-essay { background-color: #ADD8E6; } /* 浅蓝 */
+.category-tech { background-color: #90EE90; } /* 浅绿 */
+
+/* 鼠标悬停动画（增强交互） */
+.card-hover:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  transition: all 0.3s ease-in-out;
+}
